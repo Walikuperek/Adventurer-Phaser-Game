@@ -1,0 +1,104 @@
+{
+	"textures": [
+		{
+			"image": "sword_skill_reward.png",
+			"format": "RGBA8888",
+			"size": {
+				"w": 60,
+				"h": 340
+			},
+			"scale": 1,
+			"frames": [
+				{
+					"filename": "Special_2.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 160,
+						"h": 160
+					},
+					"spriteSourceSize": {
+						"x": 55,
+						"y": 75,
+						"w": 58,
+						"h": 85
+					},
+					"frame": {
+						"x": 1,
+						"y": 1,
+						"w": 58,
+						"h": 85
+					}
+				},
+				{
+					"filename": "Special_3.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 160,
+						"h": 160
+					},
+					"spriteSourceSize": {
+						"x": 55,
+						"y": 75,
+						"w": 58,
+						"h": 85
+					},
+					"frame": {
+						"x": 1,
+						"y": 88,
+						"w": 58,
+						"h": 85
+					}
+				},
+				{
+					"filename": "Special_0.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 160,
+						"h": 160
+					},
+					"spriteSourceSize": {
+						"x": 55,
+						"y": 79,
+						"w": 58,
+						"h": 81
+					},
+					"frame": {
+						"x": 1,
+						"y": 175,
+						"w": 58,
+						"h": 81
+					}
+				},
+				{
+					"filename": "Special_1.png",
+					"rotated": false,
+					"trimmed": true,
+					"sourceSize": {
+						"w": 160,
+						"h": 160
+					},
+					"spriteSourceSize": {
+						"x": 55,
+						"y": 79,
+						"w": 58,
+						"h": 81
+					},
+					"frame": {
+						"x": 1,
+						"y": 258,
+						"w": 58,
+						"h": 81
+					}
+				}
+			]
+		}
+	],
+	"meta": {
+		"app": "https://www.codeandweb.com/texturepacker",
+		"version": "3.0",
+		"smartupdate": "$TexturePacker:SmartUpdate:157da30e8f4e1a9a83b707eb81fb988a:efe1b156284e723c6a4991bcd249942e:7c8f3d9332651e2c990c57ba2c138743$"
+	}
+}
