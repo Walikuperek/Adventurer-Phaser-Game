@@ -23,7 +23,7 @@ JavaScript with Phaser framework RPG game
     coins - animated item)
     
 # TODO:
-# ========================================================
+# ===========================================
 # MENU scene
 # TUTORIAL scene 2
 # TOWN scene
