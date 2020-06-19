@@ -1,19 +1,20 @@
 class playGame extends Phaser.Scene {
   constructor() {
-    super("PlayGame");
+    super('PlayGame');
   }
 
   create() {
+    this.scene.start('bossScene');
     // Creating backgroundLayers
     this.backgroundCreate();
 
     // Crating map from JSON Tiled
     const map = this.make.tilemap({ key: 'scene1' });
 
-    const tilesetDecrationStoneTile = map.addTilesetImage('stoneTile', 'decorationStone');
+    const tilesetDecrationStoneTile = map.addTilesetImage('stoneTile', 'decorationStone', 16, 16, 1, 2);
     const tilesetDecrationTile = map.addTilesetImage('jungleTileSet', 'decoration');
     const tilesetJungleTileset = map.addTilesetImage('jungleTileSet', 'jungle');
-    const tilesetStoneTile = map.addTilesetImage('stoneTile', 'stone');
+    const tilesetStoneTile = map.addTilesetImage('stoneTile', 'stone', 16, 16, 1, 2);
 
     map.createStaticLayer('decorationStone', tilesetDecrationStoneTile);
     map.createStaticLayer('decoration', tilesetDecrationTile);
@@ -22,7 +23,6 @@ class playGame extends Phaser.Scene {
  
     jungleLayer.setCollisionByProperty({ collides: true });
     stoneLayer.setCollisionByProperty({ collides: true });
-
 
     // const debugGraphics = this.add.graphics().setAlpha(0.75);
     // jungleLayer.renderDebug(debugGraphics, {
@@ -65,18 +65,29 @@ class playGame extends Phaser.Scene {
     // Create bag with skill reward
     this.skillReward = this.physics.add.sprite(1403, 30, 'swordSkillReward').setScale(0.4);
     this.skillReward.body.offset.y = 5;
+    this.skillReward.setSize(40);
     this.skillReward.play('sword_skill_reward', true);
     this.physics.add.collider(this.skillReward, stoneLayer);
 
+
+
     // Add player
-    this.player = new Player(this, 1366, 100);
+    // this.player = new Player(this, 1436, 20);
+    this.player = new Player(this, 16, 100);
     this.healthText = this.add.text(5, 2, 'Health: 100', { fontSize: '12px', fill: 'gold' });
     this.healthText.setScrollFactor(0);
+
+
+    this.nextLevel = this.physics.add.sprite(1313, 170, 'nextLevel').setAlpha(0);
+    this.nextLevel.body.allowGravity = false;
+    this.physics.add.collider(this.nextLevel, stoneLayer);
+    this.nextLevel.setSize(30, 50);
+
 
     // Add Bees
     this.bee = new Bee(this, 400, 100, 261, 554);
     this.bee2 = new Bee(this, 770, 100, 631, 924);
-    this.bee3 = new Bee(this, 1140, 100, 1001, 1294);
+    this.bee3 = new Bee(this, 1140, 100, 1101, 1294);
     
     // Collisions
     this.physics.add.collider(this.player, jungleLayer);
@@ -88,6 +99,7 @@ class playGame extends Phaser.Scene {
     this.physics.add.overlap(this.player, this.bee, beeOverlap, null, this);
     this.physics.add.overlap(this.player, this.bee2, beeOverlap, null, this);
     this.physics.add.overlap(this.player, this.bee3, beeOverlap, null, this);
+    this.physics.add.overlap(this.player, this.skillReward, skillReward, null, this);
 
     this.physics.add.collider(this.bee, this.platforms);
     this.physics.add.collider(this.bee2, this.platforms);
@@ -113,9 +125,9 @@ class playGame extends Phaser.Scene {
   }
 
   update() {
+    console.log(this.player.x, this.player.y);
     if (this.player.keySpace.isPressed) { this.tipSpaceText.setText('') };
     this.player.movePlayer();
-    console.log('x: ', this.player.x, 'y: ', this.player.y);
 
     this.bee.update();
     this.bee2.update();
@@ -123,6 +135,13 @@ class playGame extends Phaser.Scene {
 
     // If player fall off
     if (this.player.y > 316) { this.scene.restart(); };
+    if (this.player.x >= 1495 && this.player.x <= 1513 && this.player.y > 170) {
+      this.myCam.fade(500);
+      this.player.setTint(0x00ffff);
+      this.scene.restart();
+      // this.time.delayedCall(2000, () => { this.myCam.resetFX() }, this, this);
+      // this.myCam.flash(2);
+    }
 
     this.healthText.setText('Health: ' + this.player.stats.hitPoints);
 
@@ -174,7 +193,7 @@ class playGame extends Phaser.Scene {
 function beeOverlap(player, bee) {
   // Shake the camera when touch the Bee
   this.myCam.shake(50, 0.02);
-
+  player.playerHurt();
   // Not working uless WEBGL
   player.setTint(0x00ff00);
   // /.setTint
@@ -192,7 +211,6 @@ function beeOverlap(player, bee) {
 function spiderKingCollide(player, spiderKing) {
 
   // this.myCam.shake(50, 0.02);
-  
   this.player.setTint(0xff0000);
   spiderKing.play('spiderKingDeath');
   
@@ -204,6 +222,20 @@ function spiderKingCollide(player, spiderKing) {
       this.player.clearTint();
       spiderKing.play('spiderKingWalk');
     }});
+}
+
+function skillReward(player, skillReward) {
+  this.myCam.flash(666);
+  skillReward.disableBody(true, true);
+
+  this.nextLevel.play('nextlevel', true);
+  this.tweens.add({
+    targets: this.nextLevel,
+    alpha: 1,
+    duration: 2000,
+    repeat: 0
+  });
+  // this.scene.start('bossScene');
 }
 
 

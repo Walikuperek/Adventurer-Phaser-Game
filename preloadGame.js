@@ -1,15 +1,15 @@
 
 class preloadGame extends Phaser.Scene {
     constructor() {
-      super("PreloadScene");
+      super('PreloadScene');
     }
     preload() {
 
       // Load all tiles & JSON for introduction
-      this.load.image('decorationStone', 'assets/tiles/main_lev_buildA.png');
+      this.load.image('decorationStone', 'assets/tiles/main_lev_buildA_extruded.png');
       this.load.image('decoration', 'assets/tiles/jungle tileset.png');
       this.load.image('jungle', 'assets/tiles/jungle tileset.png');
-      this.load.image('stone', 'assets/tiles/main_lev_buildA.png');
+      this.load.image('stone', 'assets/tiles/main_lev_buildA_extruded.png');
       this.load.tilemapTiledJSON('scene1', 'assets/tiles/tiledMapScene1..json');
 
       // Load all assets tile sprites
@@ -27,31 +27,46 @@ class preloadGame extends Phaser.Scene {
       // Load player spritesheets
       this.load.atlas('hero', 'assets/hero/hero_sword_bow_basic/hero_sword_bow_basic.png', 'assets/hero/hero_sword_bow_basic/hero_sword_bow_basic.json');
       this.load.atlas('blue_arrow', 'assets/hero/blue_arrow/blue_arrow.png', 'assets/hero/blue_arrow/blue_arrow.json');
+      this.load.atlas('hero_addon', 'assets/hero/playerAnimAddon.png', 'assets/hero/playerAnimAddon.json');
+
+      this.load.spritesheet('energy_ball', 'assets/hero/Energy_ball/EnergyBall.png', { frameWidth:  128, frameWidth: 128 });
+      this.load.atlas('meteor', 'assets/maps/meteor.png', 'assets/maps/meteor.json');
+      this.load.atlas('explosion', 'assets/Special/explosion/explosion.png', 'assets/Special/explosion/explosion.json')
 
       // Load enemy spritesheets
       this.load.spritesheet('bee', 'assets/enemy/bee.png', { frameWidth: 37, frameHeight: 39 });
-
-      // Load enemy images
-      this.load.image('spiderKingWalk0', 'assets/enemy/spiderKing/SkeletonKing_Walk_0.png');
-      this.load.image('spiderKingWalk1', 'assets/enemy/spiderKing/SkeletonKing_Walk_1.png');
-      this.load.image('spiderKingWalk2', 'assets/enemy/spiderKing/SkeletonKing_Walk_2.png');
-      this.load.image('spiderKingWalk3', 'assets/enemy/spiderKing/SkeletonKing_Walk_3.png');
-
-      this.load.image('spiderKingDeath0', 'assets/enemy/spiderKing/SkeletonKing_Death_0.png');
-      this.load.image('spiderKingDeath1', 'assets/enemy/spiderKing/SkeletonKing_Death_1.png');
-      this.load.image('spiderKingDeath2', 'assets/enemy/spiderKing/SkeletonKing_Death_2.png');
-      this.load.image('spiderKingDeath3', 'assets/enemy/spiderKing/SkeletonKing_Death_3.png');
+      this.load.atlas('burningGhoul', 'assets/enemy/burningGhoul/burningGhoul.png', 'assets/enemy/burningGhoul/burningGhoul.json');
 
       // Load treasure spritesheets
       this.load.spritesheet('coins', 'assets/gold/coins.png', { frameWidth: 16, frameHeight: 16 });
       this.load.atlas('swordSkillReward', 'assets/Special/sword_skill_reward.png', 'assets/Special/sword_skill_reward.json');
+      this.load.spritesheet('nextLevel', 'assets/Special/pipo-mapeffect013a-front.png', { frameWidth: 192, frameHeight: 192 });
+      this.load.spritesheet('darkMatter', 'assets/Special/pipo-mapeffect023_192.png', { frameWidth: 192, frameHeight: 192 });
+
+      // # # BOSS LEVEL # # //
+      // Load all tiles & JSON for introduction
+      this.load.image('moon', 'assets/maps/background.png');
+      this.load.image('cemetery', 'assets/maps/graveyard.png');
+      this.load.image('objects', 'assets/maps/objects.png');
+      // tile-extruder -w 16 -h 16 -i tileset.png -o tileset_extruded.png
+      this.load.image('tileset', 'assets/maps/tileset_extruded.png');
+      this.load.tilemapTiledJSON('bossScene', 'assets/maps/boss/bossMap.json');
+
+      // BOSS
+      this.load.spritesheet('BOSS', 'assets/enemy/DemonBoss/demon-attack.png', { frameWidth: 240, frameHeight: 192 });
+      this.load.spritesheet('BOSS-idle', 'assets/enemy/DemonBoss/demon-idle.png', { frameWidth: 160, frameHeight: 144 });
+      this.load.spritesheet('BOSS-no-breath', 'assets/enemy/DemonBoss/demon-attack-no-breath.png', { frameWidth: 192, frameHeight: 176 });
+      this.load.spritesheet('BOSS-fire-breath', 'assets/enemy/DemonBoss/breath-fire.png', { frameWidth: 160, frameHeight: 96 });
+      this.load.spritesheet('BOSS-blue-fire-breath', 'assets/enemy/DemonBoss/breath.png', { frameWidth: 160, frameHeight: 96 });
+      //    /BOSS LEVEL     //
     }
     /**
      * @file player
      */
     create() {
       this.add.text(20, 20, 'Loading game...');
-      this.scene.start("PlayGame");
+      this.scene.start('PlayGame');
+      // this.scene.start('bossScene');
 
       this.anims.create({
         key: 'hero_idle',
@@ -131,6 +146,21 @@ class preloadGame extends Phaser.Scene {
         frameRate: 9,
         repeat: 0
       });
+      
+      ////////////////
+      // HERO_ADDON //
+      ////////////////
+
+      this.anims.create({
+        key: 'hero_cast',
+        frames: [
+          { key: 'hero_addon', frame: 'adventurer-cast-00.png' },
+          { key: 'hero_addon', frame: 'adventurer-cast-01.png' },
+          { key: 'hero_addon', frame: 'adventurer-cast-02.png' },
+          { key: 'hero_addon', frame: 'adventurer-cast-03.png' },        ],
+        frameRate: 7,
+        repeat: 0
+      });
 
       // Particles
       this.anims.create({
@@ -150,29 +180,47 @@ class preloadGame extends Phaser.Scene {
         frameRate: 17,
         repeat: 0
       });
+      this.anims.create({ key: 'energy_ball_anim', frames: this.anims.generateFrameNumbers('energy_ball', { start: 0, end: 8 }), frameRate: 20, repeat: -1 });
 
-     
 
       // Enemies
       this.anims.create({ key: 'bee', frames: this.anims.generateFrameNumbers('bee', { start: 0, end: 7 }), frameRate: 10, repeat: -1 });
-      this.anims.create({ key: 'spiderKingWalk', frames: [
-        { key: 'spiderKingWalk0', frame: null },
-        { key: 'spiderKingWalk1', frame: null },
-        { key: 'spiderKingWalk2', frame: null },
-        { key: 'spiderKingWalk3', frame: null, duration: 50 },
-      ], frameRate: 4, repeat: -1 });
+
       this.anims.create({
-        key: 'spiderKingDeath', frames: [
-          { key: 'spiderKingDeath0', frame: null },
-          { key: 'spiderKingDeath1', frame: null },
-          { key: 'spiderKingDeath2', frame: null },
-          { key: 'spiderKingDeath3', frame: null, duration: 50 },
-        ], frameRate: 4, repeat: -1
+        key: 'burningGhoul1',
+        frames: [
+          { key: 'burningGhoul', frame: 'burning-ghoul-1.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul-2.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul-3.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul-4.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul-5.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul-6.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul-7.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul-8.png' },
+        ],
+        frameRate: 6,
+        repeat: -1
+      });
+
+      this.anims.create({
+        key: 'burningGhoul2',
+        frames: [
+          { key: 'burningGhoul', frame: 'burning-ghoul1.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul2.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul3.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul4.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul5.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul6.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul7.png' },
+          { key: 'burningGhoul', frame: 'burning-ghoul8.png' },
+        ],
+        frameRate: 6,
+        repeat: -1
       });
 
       // Special
       this.anims.create({ key: 'coin', frames: this.anims.generateFrameNumbers('coin', { start: 0, end: 3 }), frameRate: 10, repeat: -1 });
-
+      this.anims.create({ key: 'nextlevel', frames: this.anims.generateFrameNumbers('nextLevel', { start: 0, end: 9 }), frameRate: 30, repeat: -1 });
       this.anims.create({
         key: 'sword_skill_reward',
         frames: [
@@ -184,6 +232,116 @@ class preloadGame extends Phaser.Scene {
         frameRate: 5,
         repeat: -1
       });
+
+      // Meteor
+      this.anims.create({
+        key: 'Meteor',
+        frames: [
+          { key: 'meteor', frame: 'frame_00_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_01_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_02_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_03_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_04_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_05_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_06_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_07_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_08_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_09_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_10_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_11_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_12_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_13_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_14_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_15_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_16_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_17_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_18_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_19_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_20_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_21_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_22_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_23_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_24_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_25_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_26_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_27_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_28_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_29_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_30_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_31_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_32_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_33_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_34_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_35_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_36_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_37_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_38_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_39_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_00_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_41_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_42_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_43_delay-0.02s.png' },
+          { key: 'meteor', frame: 'frame_44_delay-0.02s.png' },
+        ],
+        frameRate: 120,
+        repeat: -1
+      });
+
+      this.anims.create({
+        key: 'explosion',
+        frames: [
+          { key: 'explosion', frame: 'enemy-death2.png' },
+          { key: 'explosion', frame: 'enemy-death3.png' },
+          { key: 'explosion', frame: 'enemy-death4.png' },
+          { key: 'explosion', frame: 'enemy-death5.png' },
+          { key: 'explosion', frame: 'enemy-death6.png' },
+          { key: 'explosion', frame: 'enemy-death7.png' },
+          { key: 'explosion', frame: 'enemy-death8.png' },
+          { key: 'explosion', frame: 'enemy-death9.png' },
+        ],
+        frameRate: 10,
+        repeat: 0
+      });
+
+      // BOSS FIGHT
+      // this suppose to be unused ?
+      this.anims.create({
+        key: 'BOSS_breath',
+        frames: this.anims.generateFrameNumbers('BOSS', { start: 0, end: 10 }),
+        frameRate: 6,
+        repeat: -1
+      });
+
+      this.anims.create({
+        key: 'BOSS_idle',
+        frames: this.anims.generateFrameNumbers('BOSS-idle', { start: 0, end: 5 }),
+        frameRate: 6,
+        repeat: -1
+      });
+
+      this.anims.create({
+        key: 'BOSS_no_breath',
+        frames: this.anims.generateFrameNumbers('BOSS-no-breath', { start: 0, end: 7 }),
+        frameRate: 6,
+        repeat: 0
+      });
+
+      this.anims.create({
+        key: 'BOSS_fire_breath',
+        frames: this.anims.generateFrameNumbers('BOSS-fire-breath', { start: 0, end: 4 }),
+        frameRate: 6,
+        repeat: 0
+      });
+
+      this.anims.create({
+        key: 'BOSS_blue_breath',
+        frames: this.anims.generateFrameNumbers('BOSS-blue-fire-breath', { start: 0, end: 4 }),
+        frameRate: 6,
+        repeat: 0
+      });
+
+      this.anims.create({ key: 'darkMatterBoss', frames: this.anims.generateFrameNumbers('darkMatter', { start: 0, end: 29 }), frameRate: 20, repeat: -1 }); 
+
     }
 }
 

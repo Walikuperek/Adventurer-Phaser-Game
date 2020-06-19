@@ -4,11 +4,10 @@ const gameSettings = {
 };
 
 const config = {
-  type: Phaser.CANVAS,
+  type: Phaser.AUTO,
   parent: 'phaser-app',
-  // width: 640,
   width: 384, // total 384 = 24 * 16
-  height: 208, // total 216 = 13.5 * 16
+  height: 208, // total 208 = 13 * 16
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -28,9 +27,10 @@ const config = {
       // debugStaticBodyColor: 0xffffff
     }
   },
-  scene: [
+  scene: [ 
     preloadGame,
     playGame,
+    bossScene
   ],
 }
 
