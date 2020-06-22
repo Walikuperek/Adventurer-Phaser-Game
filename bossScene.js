@@ -31,14 +31,14 @@ class bossScene extends Phaser.Scene {
         beneathPlayer.setCollisionByProperty({ collides: true });
         // /creating map
 
-        this.player = new Player(this, 16, 100);
+        this.player = new Player(this, 120, 100);
         this.arrows = this.add.group();
         this.energyBalls = this.add.group();
         this.physics.add.collider(this.player, beneathPlayer);
         this.boss = new DemonBoss(this, 285, 20, this.player).setScale(0.4).setOrigin(0, 0);
         this.DM = new DarkMatter(this, this.player, this.boss, this.boss.y);
-        this.DD = new DarkMatter(this, this.player, this.boss, this.boss.y + 60);
-        this.MM = new DarkMatter(this, this.player, this.boss, this.boss.y + 120);
+        // this.DD = new DarkMatter(this, this.player, this.boss, this.boss.y + 60);
+        // this.MM = new DarkMatter(this, this.player, this.boss, this.boss.y + 120);
         // ghouls as a tab for group of em
         // preparation for boss phases
         this.physics.add.collider(ghouls, beneathPlayer);
@@ -48,6 +48,7 @@ class bossScene extends Phaser.Scene {
         this.physics.add.overlap(this.energyBalls, ghouls, this.hitEnemy, null, this);
         this.physics.add.overlap(this.arrows, ghouls, this.hitEnemy, null, this);
         this.physics.add.overlap(this.energyBalls, this.DM, this.hitBall, null, this);
+        this.physics.add.overlap(this.DM, this.player, this.changeState_RushForBoss, null, this);
 
         
         // this.boss.y = 30;
@@ -82,16 +83,15 @@ class bossScene extends Phaser.Scene {
     }
 
     update() {
-        console.log('aaa');
-        if (this.DM.scale >= 0.4) {
-            this.DM.state = 'rushForPlayer';
-        }
+        // if (this.DM.scale >= 0.4) {
+        //     this.DM.state = 'rushForPlayer';
+        // }
         this.boss.update();
         this.boss.createGhouls();
         this.boss.animFlyUp();
         this.DM.update();
-        this.DD.update();
-        this.MM.update();
+        // this.DD.update();
+        // this.MM.update();
 
         // FOR PHASE_4
         ///////////////////////////////////////////////////////////////////////////////////////////////////////////
@@ -111,6 +111,10 @@ class bossScene extends Phaser.Scene {
         this.player.body.offset.y = -5;
     }
 
+    changeState_RushForBoss(ball, player) {
+        ball.state = 'rushForBoss';
+    }
+
     hitEnemy(projectile, enemy) {
         new Explosion(this, enemy.x, enemy.y);
         projectile.destroy();
@@ -124,6 +128,5 @@ class bossScene extends Phaser.Scene {
         projectile.destroy();
         // ball.body.velocity.x *= -1;
         flagTest = true;
-        console.log(flagTest);
     }
 }

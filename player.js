@@ -15,17 +15,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.state = '';
         this.animFlag = 0;
 
+        this.attackCooldown = 0;
         this.bowAttackCooldown = 0;
         this.magicAttackCooldown = 0;
         this.slideCooldown = 0;
-
-        this.jumpCounter = 0;
-        this.death = false;
+        this.rollCooldown = 0;
 
         this.keySpace = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.SPACE);
         this.Z = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Z);
+        this.Q = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.Q);
+        this.W = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.W);
         this.E = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.E);
-        this.R = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.R);
         this.D = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.D);
         this.F = scene.input.keyboard.addKey(Phaser.Input.Keyboard.KeyCodes.F);
         this.cursors = scene.input.keyboard.createCursorKeys();
@@ -33,19 +33,120 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.setCollideWorldBounds(true);
         
         this.body.setSize(14, 24);
-
     }
 
     movePlayer() {
         this.body.offset.y = 10;
         getKeyState(this.keySpace);
+        getKeyState(this.Q);
+        getKeyState(this.W);
         getKeyState(this.E);
-        getKeyState(this.R);
         getKeyState(this.D);
         getKeyState(this.F);
         
 
         switch (this.state) {
+
+            case 'attack':
+                switch (this.animFlag) {
+                    case -2:
+                        this.setVelocityX(0);
+                        this.anims.play('hero_swrd_drw', true);
+                        this.animFlag = -1;
+                        break;
+
+                    case -1:
+                        if (!this.anims.isPlaying)
+                            this.animFlag = 0;
+                        break;
+
+                    case 0:
+                        this.combo = 0;
+                        this.setVelocityX(0);
+                        this.anims.play('hero_attack1', true);
+                        this.animFlag = 1;
+                        break;
+
+                    case 1:
+                        if (!this.anims.isPlaying) {
+                            this.animFlag = 2;
+                        }
+                        break;
+
+                    case 2:
+                        if (this.Q.isDown)
+                            this.combo = 1;
+                        if (!this.anims.isPlaying) {
+                            if (this.combo)
+                                this.changeState('attack2');
+                            else {
+                                this.changeState('');
+                                this.attackCooldown = 1;
+                                this.scene.time.addEvent({ delay: 500, callback: () => { this.attackCooldown = 0; } });
+                                this.anims.play('hero_idle', true);
+                            }
+                        }
+                        break;
+                }
+                break;
+
+            case 'attack2':
+                switch (this.animFlag) {
+                    case 0:
+                        this.setVelocityX(0);
+                        this.anims.play('hero_attack2', true);
+                        this.combo = 0;
+                        this.animFlag = 1;
+                        break;
+
+                    case 1:
+                        if (!this.anims.isPlaying) {
+                            this.animFlag = 2;
+                        }
+                        break;
+
+                    case 2:
+                        if (this.Q.isDown)
+                            this.combo = 1;
+                        if (!this.anims.isPlaying) {
+                            if (this.combo)
+                                this.changeState('attack3');
+                            else {
+                                this.changeState('');
+                                this.attackCooldown = 1;
+                                this.scene.time.addEvent({ delay: 500, callback: () => { this.attackCooldown = 0; } });
+                                this.anims.play('hero_idle', true);
+                            }
+                        }
+                        break;
+                }
+                break;
+
+            case 'attack3':
+                switch (this.animFlag) {
+                    case 0:
+                        this.anims.play('hero_attack3', true);
+                        this.animFlag = 1;
+                        this.setVelocityX((this.flipX ? -1 : 1) * 50);
+                        break;
+
+                    case 1:
+                        if (!this.anims.isPlaying) {
+                            this.setVelocityX(0);
+                            this.animFlag = 2;
+                        }
+                        break;
+
+                    case 2:
+                        if (!this.anims.isPlaying) {
+                            this.changeState('');
+                            this.attackCooldown = 1;
+                            this.scene.time.addEvent({ delay: 500, callback: () => { this.attackCooldown = 0; } });
+                            this.anims.play('hero_idle', true);
+                        }
+                        break;
+                }
+                break;
 
             case 'hero_magic_attack':
                 switch (this.animFlag) {
@@ -72,7 +173,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 switch(this.animFlag) {
                     case 0:
                         this.anims.play('hero_bow', true);
-                        this.scene.time.addEvent({ delay: 700, callback: () => { var arrow = new BlueArrow(this.scene); } });
+                        this.scene.time.addEvent({ delay: 700, callback: () => { new BlueArrow(this.scene); } });
                         this.setVelocityX(0);
                         this.animFlag = 1;
                         this.bowAttackCooldown = 1;
@@ -95,7 +196,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                     case 0:
                         this.anims.play('hero_bow_jump', true);
-                        this.scene.time.addEvent({ delay: 300, callback: () => { var arrow = new BlueArrow(this.scene); } });
+                        this.scene.time.addEvent({ delay: 300, callback: () => { new BlueArrow(this.scene); } });
                         this.setVelocityX(0);
                         this.animFlag = 1;
 
@@ -119,19 +220,38 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         this.flipX == false 
                             ? this.setVelocityX(this.stats.slideSpeed)
                             : this.setVelocityX(-this.stats.slideSpeed);
-                        // this.scene.tweens.add({ targets: this, currentSlideSpeed: 0, ease: 'Linear', duration: this.anims.duration });
+                        this.scene.tweens.add({ targets: this, currentSlideSpeed: 0, ease: 'Linear', duration: this.anims.duration });
                         this.animFlag = 1;
                         this.slideCooldown = 1;
                         this.scene.time.addEvent({ delay: 1500, callback: () => { this.slideCooldown = 0; } });
                         break;
 
                     case 1:
-                        if (!this.anims.isPlaying) this.changeState('');
-                        
+                        if (!this.anims.isPlaying) 
+                            this.changeState('');
                         var fade = this.scene.add.image(this.x, this.y, 'hero', this.anims.currentFrame.frame.name).setAlpha(0.3).setTint(0xff0000);
                         this.scene.tweens.add({ targets: fade, alpha: 0, ease: '', duration: 250, onComplete: () => { fade.destroy(); }});
                         break;
                         
+                }
+                break;
+
+            case 'hero_roll':
+                switch (this.animFlag) {
+                    case 0:
+                        this.anims.play('hero_roll', true);
+                        this.setVelocityY(-200)
+                        this.animFlag = 1;
+                        this.rollCooldown = 1;
+                        this.scene.time.addEvent({ delay: 1500, callback: () => { this.rollCooldown = 0; } });
+                        break;
+
+                    case 1:
+                        if (!this.anims.isPlaying || this.body.onFloor())
+                            this.changeState('');
+                            var fade = this.scene.add.image(this.x, this.y, 'hero', this.anims.currentFrame.frame.name).setAlpha(0.3).setTint(0xff0000);
+                            this.scene.tweens.add({ targets: fade, alpha: 0, ease: '', duration: 250, onComplete: () => { fade.destroy(); } });
+                        break;
                 }
                 break;
 
@@ -140,14 +260,17 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                 if (this.body.onFloor()) {
 
-                    this.jump = 1;
+                    if (this.Q.isPressed && !this.attackCooldown) {
 
-                    if (this.E.isPressed && !this.bowAttackCooldown) {
+                        this.setVelocityX(0);
+                        this.changeState('attack');
+                    
+                    } else if (this.E.isPressed && !this.bowAttackCooldown) {
 
                         this.setVelocityX(0);
                         this.changeState('hero_bow_attack');
 
-                    } else if (this.F.isPressed && !this.magicAttackCooldown) {
+                    } else if (this.W.isPressed && !this.magicAttackCooldown) {
 
                         this.changeState('hero_magic_attack');
 
@@ -180,41 +303,50 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         this.anims.play('hero_idle', true);
 
                     }
-
+                
+                // JUMP
                 } else {
+                    // Move left while jump
                     if (this.cursors.left.isDown && this.x > 0) {
 
                         this.flipX = true;
                         this.setVelocityX(-this.stats.walkSpeed);
 
+                        // Shoot ranged while jump & move left
+                        if (this.E.isPressed && !this.bowAttackCooldown)
+                            this.changeState('hero_bow_jump_attack');
+
+                        // Roll while jump & move left
+                        else if (this.D.isPressed && !this.rollCooldown)
+                            this.changeState('hero_roll');
+
+                    // Move right while jump
                     } else if (this.cursors.right.isDown && this.x < game.config.width * gameSettings.sceneWidth) {
 
                         this.flipX = false;
                         this.setVelocityX(this.stats.walkSpeed);
 
-                    } else if (this.R.isPressed && !this.bowAttackCooldown) {
+                        // Shoot ranged while jump & move right
+                        if (this.E.isPressed && !this.bowAttackCooldown)
+                            this.changeState('hero_bow_jump_attack');
+
+                        // Roll while jump & move right
+                        else if (this.D.isPressed && !this.rollCooldown)
+                            this.changeState('hero_roll');
+                    
+                    // Shoot while jump
+                    } else if (this.E.isPressed && !this.bowAttackCooldown) {
 
                         this.changeState('hero_bow_jump_attack');
+
+                    // Roll while jump
+                    } else if (this.D.isPressed && !this.rollCooldown) {
+
+                        this.changeState('hero_roll');
+
                     }
                 }
-                // else {
-
-                //     if (this.keySpace.isPressed && this.jump) {
-                //         this.jump--;
-                //         this.change_state("Boost");
-                //     }
-                //     else if (this.X.isPressed && !this.attack_cooldown) {
-                //         this.change_state("AttackAir");
-                //     } else this.setVelocityX(0);
-
-                    // if (this.body.velocity.y > 0 && this.anims.getCurrentKey() != 'hero_fall')
-                    //     this.anims.play('hero_fall', true);
-                    // else if (this.body.velocity.y < 0 && this.Z.isUp)
-                    //     this.body.velocity.y *= 0.8;
-
-                // }
                 break;
-
         }
 
         // if (this.state == 'slide') {
@@ -232,7 +364,6 @@ class Player extends Phaser.Physics.Arcade.Sprite {
     }
 
     playerHurt() {
-        // console.log(this.stats.hitPoints, 'hitPoints');
         this.stats.hitPoints -= 1;
 
         if (this.stats.hitPoints <= 0) {
@@ -272,7 +403,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
     changeState(state, flag = 0) {
         this.state = state;
-        this.flag = flag;
+        this.animFlag = flag;
     };
 }
 

@@ -93,6 +93,22 @@ class preloadGame extends Phaser.Scene {
       });
 
       this.anims.create({
+        key: 'hero_roll',
+        frames: [
+          { key: 'hero', frame: 'adventurer-smrslt-00-1.3.png' },
+          { key: 'hero', frame: 'adventurer-smrslt-01-1.3.png' },
+          { key: 'hero', frame: 'adventurer-smrslt-02-1.3.png' },
+          { key: 'hero', frame: 'adventurer-smrslt-03-1.3.png' },
+          { key: 'hero', frame: 'adventurer-smrslt-00-1.3.png' },
+          { key: 'hero', frame: 'adventurer-smrslt-01-1.3.png' },
+          { key: 'hero', frame: 'adventurer-smrslt-02-1.3.png' },
+          { key: 'hero', frame: 'adventurer-smrslt-03-1.3.png' },
+        ],
+        frameRate: 14,
+        repeat: 0
+      });
+
+      this.anims.create({
         key: 'hero_run',
         frames: [
           { key: 'hero', frame: 'adventurer-run-00-1.3.png' },
@@ -146,6 +162,18 @@ class preloadGame extends Phaser.Scene {
         frameRate: 9,
         repeat: 0
       });
+
+      this.anims.create({
+        key: 'hero_swrd_drw',
+        frames: [
+          { key: 'hero', frame: 'adventurer-swrd-drw-00-1.3.png' },
+          { key: 'hero', frame: 'adventurer-swrd-drw-01-1.3.png' },
+          { key: 'hero', frame: 'adventurer-swrd-drw-02-1.3.png' },
+          { key: 'hero', frame: 'adventurer-swrd-drw-03-1.3.png' },
+        ],
+        frameRate: 7,
+        repeat: 0
+      });
       
       ////////////////
       // HERO_ADDON //
@@ -159,6 +187,47 @@ class preloadGame extends Phaser.Scene {
           { key: 'hero_addon', frame: 'adventurer-cast-02.png' },
           { key: 'hero_addon', frame: 'adventurer-cast-03.png' },        ],
         frameRate: 7,
+        repeat: 0
+      });
+
+      this.anims.create({
+        key: 'hero_attack1',
+        frames: [
+          { key: 'hero_addon', frame: 'adventurer-attack1-00.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack1-01.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack1-02.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack1-03.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack1-04.png' },
+        ],
+        frameRate: 14,
+        repeat: 0
+      });
+
+      this.anims.create({
+        key: 'hero_attack2',
+        frames: [
+          { key: 'hero_addon', frame: 'adventurer-attack2-00.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack2-01.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack2-02.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack2-03.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack2-04.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack2-05.png' },
+        ],
+        frameRate: 15,
+        repeat: 0
+      });
+
+      this.anims.create({
+        key: 'hero_attack3',
+        frames: [
+          { key: 'hero_addon', frame: 'adventurer-attack3-00.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack3-01.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack3-02.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack3-03.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack3-04.png' },
+          { key: 'hero_addon', frame: 'adventurer-attack3-05.png' },
+        ],
+        frameRate: 15,
         repeat: 0
       });
 

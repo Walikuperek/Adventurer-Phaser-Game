@@ -115,10 +115,10 @@ class Meteor extends Phaser.GameObjects.Sprite {
 
 
 class DarkMatter extends Phaser.GameObjects.Sprite {
-    constructor(scene, player, boss, yWhere) {
+    constructor(scene, player, boss, yStartingPosition) {
 
         let x = boss.x;
-        let y = yWhere;
+        let y = yStartingPosition;
 
         super(scene, x, y, 'darkMatter');
         
@@ -138,8 +138,7 @@ class DarkMatter extends Phaser.GameObjects.Sprite {
             case 'static':
                 if (this.scale <= 0.4) {
                     this.scale += 0.001;
-                    console.log(this.scale);
-                }
+                } else this.state = 'rushForPlayer';
                 break;
             case 'rushForPlayer':
                 if (!flagTest) {
@@ -162,8 +161,27 @@ class DarkMatter extends Phaser.GameObjects.Sprite {
                 }
                 break;
             case 'rushForBoss':
-                break;
-            default:
+                /**
+                 * xAxisDistance = abs(boss.x - ball.x)
+                 * b = abs(boss.y - ball.y)
+                 * stepX = ball.x += 1
+                 * stepY = b / a
+                 */
+                const xAxisDistance = Math.abs(this.boss.x - this.x);
+                const yAxisDistance = Math.abs(this.boss.y - this.y);
+                this.stepX = 5;
+                this.stepY = 3;
+
+                if (this.x < this.boss.x + 100) this.x += this.stepX;
+                else if (this.x >= this.boss.x) { this.destroy() }
+                else this.x += this.stepX;
+                
+                // console.log('boss.x: ', this.boss.x, 'ball.x: ', this.x);
+
+                if (this.y < 68) this.y = this.y;
+                else this.y -= yAxisDistance/xAxisDistance;
+                console.log('boss.y: ', this.boss.y, 'ball.y: ', this.y);
+
                 break;
         }
 
