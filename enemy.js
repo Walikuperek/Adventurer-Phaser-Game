@@ -47,6 +47,7 @@ class ExplodingGhoul extends Phaser.Physics.Arcade.Sprite {
             // If touch the players X
             if (this.x <= this.player.x + 20 && (this.player.y >= this.y + 10) && this.player.state != 'slide') {
                 new Explosion(this.scene, this.x, this.y);
+                // this.player.resetPlayerPosition(); /* add this.player.state = 'dead' -> player.dead.anim */
                 if (this == ghouls[0]) {
                     ghouls.shift(this)
                 } else ghouls.pop(this);
@@ -59,6 +60,7 @@ class ExplodingGhoul extends Phaser.Physics.Arcade.Sprite {
             // If touch the players X
             if (this.x >= this.player.x - 20 && (this.player.y >= this.y + 10) && this.player.state != 'slide') {
                 new Explosion(this.scene, this.x, this.y);
+                // this.player.resetPlayerPosition(); /* add this.player.state = 'dead' -> player.dead.anim */
                 if (this == ghouls[0]) {
                     ghouls.shift(this)
                 } else ghouls.pop(this);

@@ -70,7 +70,6 @@ class playGame extends Phaser.Scene {
     this.physics.add.collider(this.skillReward, stoneLayer);
 
 
-
     // Add player
     // this.player = new Player(this, 1436, 20);
     this.player = new Player(this, 16, 100);
@@ -89,6 +88,7 @@ class playGame extends Phaser.Scene {
     this.bee2 = new Bee(this, 770, 100, 631, 924);
     this.bee3 = new Bee(this, 1140, 100, 1101, 1294);
     
+
     // Collisions
     this.physics.add.collider(this.player, jungleLayer);
     this.physics.add.collider(this.player, stoneLayer);
@@ -105,9 +105,11 @@ class playGame extends Phaser.Scene {
     this.physics.add.collider(this.bee2, this.platforms);
     this.physics.add.collider(this.bee3, this.platforms);
 
+
     // arrows
     this.arrows = this.add.group();
 
+    
     /**
      * @description CAMERA
      */

@@ -1,13 +1,10 @@
 // Global variable for enemies
 const ghouls = [];
 let flagTest = false;
+
 class bossScene extends Phaser.Scene {
     constructor() {
         super('bossScene');
-    }
-
-    preload() {
-
     }
 
     create() {
@@ -17,7 +14,7 @@ class bossScene extends Phaser.Scene {
         const bossBcgMoon = mapBoss.addTilesetImage('background', 'moon');
         const bossCemetery = mapBoss.addTilesetImage('cemetery', 'cemetery');
         const bossObjectsBehind = mapBoss.addTilesetImage('objects', 'objects');
-        const bossGroundTile = mapBoss.addTilesetImage('tileset', 'tileset', 16, 16, 1, 2);
+        const bossGroundTile = mapBoss.addTilesetImage('tileset', 'tileset', 16, 16, 1, 2); /* Extruded tileset */
         const bossObjects = mapBoss.addTilesetImage('objects', 'objects');
         const bossObjects2 = mapBoss.addTilesetImage('objects', 'objects');
 
@@ -35,40 +32,85 @@ class bossScene extends Phaser.Scene {
         this.arrows = this.add.group();
         this.energyBalls = this.add.group();
         this.physics.add.collider(this.player, beneathPlayer);
-        this.boss = new DemonBoss(this, 285, 20, this.player).setScale(0.4).setOrigin(0, 0);
+
+        this.boss = new DemonBoss(this, 285,30, this.player).setOrigin(0, 0);
         this.DM = new DarkMatter(this, this.player, this.boss, this.boss.y);
         // this.DD = new DarkMatter(this, this.player, this.boss, this.boss.y + 60);
         // this.MM = new DarkMatter(this, this.player, this.boss, this.boss.y + 120);
-        // ghouls as a tab for group of em
-        // preparation for boss phases
-        this.physics.add.collider(ghouls, beneathPlayer);
-
+        
         //___________
         // HIT ENEMY
-        this.physics.add.overlap(this.energyBalls, ghouls, this.hitEnemy, null, this);
-        this.physics.add.overlap(this.arrows, ghouls, this.hitEnemy, null, this);
-        this.physics.add.overlap(this.energyBalls, this.DM, this.hitBall, null, this);
+
+        /* Melee overlap with boss */
+        this.physics.add.overlap(this.player.playerAttack, this.boss, (object, attack) => { this.player.attack_hit(attack, object) }, null, this);
+        this.physics.add.overlap(this.arrows, this.boss, (object, attack) => { this.player.attack_hit(attack, object) }, null, this);
+
+        /* Particles overlaps */
+        this.physics.add.overlap(this.energyBalls, ghouls, this.hitGhouls, null, this);
+        this.physics.add.overlap(this.arrows, ghouls, this.hitGhouls, null, this);
+        this.physics.add.overlap(this.energyBalls, this.DM, this.hitDarkMatter, null, this);
         this.physics.add.overlap(this.DM, this.player, this.changeState_RushForBoss, null, this);
 
+        this.colliderPlayerToBoss = this.physics.add.collider(this.player, this.boss);
+        this.physics.add.collider(ghouls, beneathPlayer); /* const [] for this.boss.Phase_2() */
         
-        // this.boss.y = 30;
+        this.camera(); /* main camera settings: follows this.player */
+    }
 
-        this.meteor1 = new Meteor(this)
-        this.physics.add.collider(this.meteor1, beneathPlayer);
+    update() {
+        this.collideRemovePlayerBoss(); /* Removes collision when player.state == 'slide' || 'hero_roll' */
 
-        this.meteor = new Meteor(this)
-        this.physics.add.collider(this.meteor, beneathPlayer);
+        // if (this.DM.scale >= 0.4) {
+        //     this.DM.state = 'rushForPlayer';
+        // }
+        // this.boss.update();
+        // this.boss.createGhouls();
+        // this.boss.animFlyUp();
+        // this.DM.update();
+        // this.DD.update();
+        // this.MM.update();
 
-        this.meteor2 = new Meteor(this)
-        this.physics.add.collider(this.meteor2, beneathPlayer);
 
+        
+        this.player.movePlayer();
+        this.player.body.offset.y = -5;
+    }
 
+    /**
+     * @method collideRomovePlayerBoss
+     * 
+     * Remove collider when player is in 'slide' or 'hero_roll' state
+     */
+    collideRemovePlayerBoss() {
+        if(this.player.state === 'slide' || this.player.state === 'hero_roll') {
+            this.colliderPlayerToBoss.active = false;
+            this.time.delayedCall(200, () => { this.colliderPlayerToBoss.active = true }, this, this.scene);
+        }
+    }
 
+    // TODO:
+    changeState_RushForBoss(ball, player) {
+        ball.state = 'rushForBoss';
+    }
 
+    hitGhouls(projectile, enemy) {
+        new Explosion(this, enemy.x, enemy.y);
+        projectile.destroy();
+        if (enemy == ghouls[0]) {
+            ghouls.shift(enemy)
+        } else ghouls.pop(enemy);
+    }
 
-        /**
-         * @description CAMERA
-         */
+    hitDarkMatter(projectile, ball) {
+
+        projectile.destroy();
+        flagTest = true;
+    }
+
+    /**
+    * @method camera
+    */
+    camera() {
         // Set world bounds to allow camera to follow the player
         this.myCam = this.cameras.main;
         this.myCam.roundPixels = true;
@@ -78,55 +120,5 @@ class bossScene extends Phaser.Scene {
 
         // Making the camera follow the player
         this.myCam.startFollow(this.player);
-        /** /camera **/
-
-    }
-
-    update() {
-        // if (this.DM.scale >= 0.4) {
-        //     this.DM.state = 'rushForPlayer';
-        // }
-        this.boss.update();
-        this.boss.createGhouls();
-        this.boss.animFlyUp();
-        this.DM.update();
-        // this.DD.update();
-        // this.MM.update();
-
-        // FOR PHASE_4
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        if (this.meteor){
-            this.meteor.update();
-        }
-        this.meteor1.update();
-        this.meteor2.update();
-
-        if (this.meteor.body.onFloor()) {
-            this.myCam.shake(19);
-            this.tweens.add({ targets: this.myCam, duration: 250, onComplete: () => { this.myCam.shake(0); } });
-        }
-        ///////////////////////////////////////////////////////////////////////////////////////////////////////////
-        
-        this.player.movePlayer();
-        this.player.body.offset.y = -5;
-    }
-
-    changeState_RushForBoss(ball, player) {
-        ball.state = 'rushForBoss';
-    }
-
-    hitEnemy(projectile, enemy) {
-        new Explosion(this, enemy.x, enemy.y);
-        projectile.destroy();
-        if (enemy == ghouls[0]) {
-            ghouls.shift(enemy)
-        } else ghouls.pop(enemy);
-    }
-
-    hitBall(projectile, ball) {
-
-        projectile.destroy();
-        // ball.body.velocity.x *= -1;
-        flagTest = true;
     }
 }

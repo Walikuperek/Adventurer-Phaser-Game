@@ -28,8 +28,21 @@ class preloadGame extends Phaser.Scene {
       this.load.atlas('hero', 'assets/hero/hero_sword_bow_basic/hero_sword_bow_basic.png', 'assets/hero/hero_sword_bow_basic/hero_sword_bow_basic.json');
       this.load.atlas('blue_arrow', 'assets/hero/blue_arrow/blue_arrow.png', 'assets/hero/blue_arrow/blue_arrow.json');
       this.load.atlas('hero_addon', 'assets/hero/playerAnimAddon.png', 'assets/hero/playerAnimAddon.json');
+      this.load.spritesheet('slash', 'assets/hero/attack100x100.png', { frameWidth: 100, frameHeight: 100 });
+      this.load.image('arrow', 'assets/hero/arrow.png');
+      this.load.image('blood_slash_1', 'assets/hero/blood_slash/B001.png');
+      this.load.image('blood_slash_2', 'assets/hero/blood_slash/B002.png');
+      this.load.image('blood_slash_3', 'assets/hero/blood_slash/B003.png');
+      this.load.image('blood_slash_4', 'assets/hero/blood_slash/B004.png');
+      this.load.image('blood_slash_5', 'assets/hero/blood_slash/B005.png');
+      this.load.image('blood_slash_6', 'assets/hero/blood_slash/B006.png');
+      this.load.image('blood_slash_7', 'assets/hero/blood_slash/B007.png');
+      this.load.image('blood_slash_8', 'assets/hero/blood_slash/B008.png');
+      this.load.image('blood_slash_9', 'assets/hero/blood_slash/B009.png');
+      this.load.image('blood_slash_10', 'assets/hero/blood_slash/B010.png');
 
       this.load.spritesheet('energy_ball', 'assets/hero/Energy_ball/EnergyBall.png', { frameWidth:  128, frameWidth: 128 });
+      this.load.spritesheet('tornado', 'assets/hero/TornadoLoop_96x96.png', { frameWidth: 96, frameWidth: 96 });
       this.load.atlas('meteor', 'assets/maps/meteor.png', 'assets/maps/meteor.json');
       this.load.atlas('explosion', 'assets/Special/explosion/explosion.png', 'assets/Special/explosion/explosion.json')
 
@@ -38,7 +51,7 @@ class preloadGame extends Phaser.Scene {
       this.load.atlas('burningGhoul', 'assets/enemy/burningGhoul/burningGhoul.png', 'assets/enemy/burningGhoul/burningGhoul.json');
 
       // Load treasure spritesheets
-      this.load.spritesheet('coins', 'assets/gold/coins.png', { frameWidth: 16, frameHeight: 16 });
+      this.load.spritesheet('coin', 'assets/gold/coins.png', { frameWidth: 16, frameHeight: 16 });
       this.load.atlas('swordSkillReward', 'assets/Special/sword_skill_reward.png', 'assets/Special/sword_skill_reward.json');
       this.load.spritesheet('nextLevel', 'assets/Special/pipo-mapeffect013a-front.png', { frameWidth: 192, frameHeight: 192 });
       this.load.spritesheet('darkMatter', 'assets/Special/pipo-mapeffect023_192.png', { frameWidth: 192, frameHeight: 192 });
@@ -231,6 +244,26 @@ class preloadGame extends Phaser.Scene {
         repeat: 0
       });
 
+      this.anims.create({
+        key: 'blood_slash',
+        frames: [
+          { key: 'blood_slash_1', frame: null },
+          { key: 'blood_slash_2', frame: null },
+          { key: 'blood_slash_3', frame: null },
+          { key: 'blood_slash_4', frame: null },
+          { key: 'blood_slash_5', frame: null },
+          { key: 'blood_slash_6', frame: null },
+          { key: 'blood_slash_7', frame: null },
+          { key: 'blood_slash_8', frame: null },
+          { key: 'blood_slash_9', frame: null },
+          { key: 'blood_slash_10', frame: null },
+        ],
+        frameRate: 10,
+        repeat: 0
+      });
+      
+      this.anims.create({ key: 'slash_anim', frames: this.anims.generateFrameNumbers('slash', { start: 0, end: 9 }), frameRate: 8, repeat: 0 });
+
       // Particles
       this.anims.create({
         key: 'blue_arrow_anim',
@@ -249,7 +282,9 @@ class preloadGame extends Phaser.Scene {
         frameRate: 17,
         repeat: 0
       });
+
       this.anims.create({ key: 'energy_ball_anim', frames: this.anims.generateFrameNumbers('energy_ball', { start: 0, end: 8 }), frameRate: 20, repeat: -1 });
+      this.anims.create({ key: 'tornado_anim', frames: this.anims.generateFrameNumbers('tornado', { start: 0, end: 60 }), frameRate: 30, repeat: -1 });
 
 
       // Enemies
@@ -288,7 +323,7 @@ class preloadGame extends Phaser.Scene {
       });
 
       // Special
-      this.anims.create({ key: 'coin', frames: this.anims.generateFrameNumbers('coin', { start: 0, end: 3 }), frameRate: 10, repeat: -1 });
+      this.anims.create({ key: 'coin_spin', frames: this.anims.generateFrameNumbers('coin', { start: 0, end: 3 }), frameRate: 5, repeat: -1 });
       this.anims.create({ key: 'nextlevel', frames: this.anims.generateFrameNumbers('nextLevel', { start: 0, end: 9 }), frameRate: 30, repeat: -1 });
       this.anims.create({
         key: 'sword_skill_reward',

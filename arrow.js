@@ -1,20 +1,53 @@
 /**
- * @class BlueArrow
+ * @class Arrow
  *
  * For Player.state: hero_bow_attack
  * For Player.state: hero_bow_jump_attack
+ */
+class Arrow extends Phaser.GameObjects.Sprite {
+    constructor(scene) {
+
+        let x = scene.player.x;
+        let y = scene.player.y + 2;
+
+        super(scene, x, y, 'arrow');
+        this.DMG = 1;
+        scene.add.existing(this);
+        scene.physics.world.enableBody(this);
+        this.body.setSize(32, 5);
+        this.body.allowGravity = false;
+
+        // Move in the direction of player's sight
+        // Add flip image when player flipped
+        if (scene.player.flipX == false) {
+            this.body.velocity.x += 400;
+            this.flipX = false;
+
+        } else if (scene.player.flipX == true) {
+            this.body.velocity.x -= 400;
+            this.flipX = true;
+
+        }
+        scene.arrows.add(this);
+        scene.time.delayedCall(700, () => { this.destroy(); }, this, this.scene);
+    }
+}
+
+/**
+ * @class BlueArrow - class Arrow upgrade ? TODO:
  */
 class BlueArrow extends Phaser.GameObjects.Sprite {
     constructor(scene) {
 
         let x = scene.player.x;
-        let y = scene.player.y;
+        let y = scene.player.y + 2;
 
         super(scene, x, y, 'blue_arrow');
 
         scene.add.existing(this);
         scene.physics.world.enableBody(this);
         this.body.setSize(80, 20);
+
         this.play('blue_arrow_anim');
         this.body.allowGravity = false;
 
@@ -29,10 +62,9 @@ class BlueArrow extends Phaser.GameObjects.Sprite {
             this.flipX = true;
 
         }
-        scene.arrows.add(this);
+        scene.blueArrows.add(this);
         scene.time.delayedCall(700, () => { this.destroy(); }, this, this.scene);
     }
-
 }
 
 /**
@@ -71,7 +103,44 @@ class EnergyBall extends Phaser.GameObjects.Sprite {
         scene.energyBalls.add(this);
         scene.time.delayedCall(1000, () => { this.destroy(); }, this, this.scene);
     }
+}
 
+/**
+ * @class Tornado
+ * 
+ * For Player.state: hero_magic_attack
+ */
+class Tornado extends Phaser.GameObjects.Sprite {
+    constructor(scene) {
+
+        let x = scene.player.x;
+        let y = scene.player.y;
+
+        // Adds some positioning to the EnergyBall
+        // If player flipped: move a bit to the left, etc.  
+        scene.player.flipX ? x -= 20 : x += 20;
+        y += 3;
+        super(scene, x, y, 'tornado');
+
+        scene.add.existing(this);
+        scene.physics.world.enableBody(this);
+        this.body.setSize(96, 96);
+        this.play('tornado_anim');
+        this.body.allowGravity = false;
+
+        // Flips the image if player is flipped
+        if (scene.player.flipX == false) {
+            this.body.velocity.x += 100;
+            this.flipX = false;
+
+        } else if (scene.player.flipX == true) {
+            this.body.velocity.x -= 100;
+            this.flipX = true;
+
+        }
+        scene.energyBalls.add(this);
+        scene.time.delayedCall(1500, () => { this.destroy(); }, this, this.scene);
+    }
 }
 
 /**
