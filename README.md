@@ -9,8 +9,8 @@ JavaScript with Phaser framework RPG game
     prepared functions/classes for phases e.g. class Meteor(phase 4), class DarkMatter(phase 1)
  4. hero implemented (
     animations,
-    attacks: range and magic(melee todo),
-    slide and jump )
+    attacks: range, melee(+ dmg + slash when dmg dealt) and magic,
+    slide, jump and double jump)
  5. enemies implemented (
     bee,
     exploding ghoul )
@@ -23,13 +23,19 @@ JavaScript with Phaser framework RPG game
     coins - animated item)
     
 # TODO:
-# ===========================================
+# ========================================
 # MENU scene
 # TUTORIAL scene 2
 # TOWN scene
 # CATEDRA scene
 # DUNGEON scene
-# PLOT & ANGEL to lead history
+# ANGEL to lead history
+# Plot:
+# {
+ When you go through the first tutorial and you will collect first skill improvment - first teleport appears. \n
+ It leads to second tut map where you should get to know how to use bow, slide, double jump and magic barrier \n
+ 
+# }
 # SMARTPHONE controller
 # UI
  - HP
