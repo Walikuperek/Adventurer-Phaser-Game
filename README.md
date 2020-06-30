@@ -35,9 +35,7 @@ JavaScript with Phaser framework RPG game
  2. It leads to second tut map where you should get to know how to use bow, slide, double jump and magic barrier, at the end teleport appears - leading to the town.
  3. Town with all of its folks - history how they were demolished by portal that let all of the demons onto these lands - main teleport to the rest.
  4. Demolished lands fullfiled with demons.
- 5. Catedra - Angel appears with knoledge how to destroy the portal - spiral magic
- # plot twist when collected first Spiral Stone BOSS will say that is not enough to destroy the portal and:
- = 2-3 magic stones(up to collect at the end of the maps) will be needed.
+ 5. Catedra - Angel appears with knoledge how to destroy the portal - spiral magic (plot twist when collected first Spiral Stone BOSS will say that is not enough to destroy the portal and = 2-3 magic stones, up to collect at the end of the maps) will be needed.
  6. Catedra first Spiral Stone!
  7. Dungeon of the catedra - Second Spiral Stone.
  8. Magic nest - Warp - Third Spiral Stone.
