@@ -71,6 +71,7 @@ class playGame extends Phaser.Scene {
     this.tipSpaceText = this.add.text(105, 20, 'Press [SPACE] to jump', { fontSize: '20px', fill: 'gold' });
 
     // Create bag with skill reward
+    this.teleportActive = false; /* switch to true upon collecting skill reward */
     this.skillReward = this.physics.add.sprite(1403, 30, 'swordSkillReward').setScale(0.4);
     this.skillReward.body.offset.y = 5;
     this.skillReward.setSize(40);
@@ -223,12 +224,14 @@ function beeOverlap(player, bee) {
  * @param {levitating sword} skillReward
  * 
  * When touch:
+ *  Switch this.teleportActive to true
  *  Flash the camera
  *  Disappear the skillReward
  *  Show tooltip
  *  Show teleport to the next lvl
  */
 function skillReward(player, skillReward) {
+  this.teleportActive = true;
   this.myCam.flash(666);
   skillReward.disableBody(true, true);
   this.tipTeleport = this.add.text(1390, 10, 'Go to the teleport', { fontSize: '14px', fill: 'gold' });
@@ -242,7 +245,7 @@ function skillReward(player, skillReward) {
 }
 
 function teleportNextLevel() {
-  if (teleportActive === true) {
+  if (this.teleportActive === true) {
     this.scene.start('bossScene');
   }
 }
