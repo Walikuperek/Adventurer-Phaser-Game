@@ -8,18 +8,24 @@ class bossScene extends Phaser.Scene {
     }
 
     create() {
+
+        this.moonBackground = this.add.tileSprite(0, 0, game.config.width, game.config.height, 'moon');
+        this.cemeteryBackground = this.add.tileSprite(0, 85, game.config.width, game.config.height, 'cemetery');
+        this.moonBackground.setOrigin(0, 0).setScrollFactor(0);
+        this.cemeteryBackground.setOrigin(0, 0).setScrollFactor(0);
+
         // Crating map from JSON Tiled
         const mapBoss = this.make.tilemap({ key: 'bossScene' });
 
-        const bossBcgMoon = mapBoss.addTilesetImage('background', 'moon');
-        const bossCemetery = mapBoss.addTilesetImage('cemetery', 'cemetery');
+        // const bossBcgMoon = mapBoss.addTilesetImage('background', 'moon');
+        // const bossCemetery = mapBoss.addTilesetImage('cemetery', 'cemetery');
         const bossObjectsBehind = mapBoss.addTilesetImage('objects', 'objects');
         const bossGroundTile = mapBoss.addTilesetImage('tileset', 'tileset', 16, 16, 1, 2); /* Extruded tileset */
         const bossObjects = mapBoss.addTilesetImage('objects', 'objects');
         const bossObjects2 = mapBoss.addTilesetImage('objects', 'objects');
 
-        mapBoss.createStaticLayer('moon', bossBcgMoon);
-        mapBoss.createStaticLayer('cemetery', bossCemetery);
+        // mapBoss.createStaticLayer('moon', bossBcgMoon);
+        // mapBoss.createStaticLayer('cemetery', bossCemetery);
         mapBoss.createStaticLayer('obcjectsBehind', bossObjectsBehind);
         const beneathPlayer = mapBoss.createStaticLayer('ground', bossGroundTile);
         mapBoss.createStaticLayer('objects', bossObjects);
@@ -63,7 +69,7 @@ class bossScene extends Phaser.Scene {
         // if (this.DM.scale >= 0.4) {
         //     this.DM.state = 'rushForPlayer';
         // }
-        // this.boss.update();
+        this.boss.update();
         // this.boss.createGhouls();
         // this.boss.animFlyUp();
         // this.DM.update();
@@ -74,6 +80,9 @@ class bossScene extends Phaser.Scene {
         
         this.player.movePlayer();
         this.player.body.offset.y = -5;
+
+        parallaxBackground(this, this.moonBackground, .03);
+        parallaxBackground(this, this.cemeteryBackground, .2);
     }
 
     /**

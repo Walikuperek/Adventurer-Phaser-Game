@@ -68,6 +68,44 @@ class BlueArrow extends Phaser.GameObjects.Sprite {
 }
 
 /**
+ * @class MagicBarrier
+ * 
+ * For Player.state: hero_magic_barrier
+ */
+class MagicBarrier extends Phaser.GameObjects.Sprite {
+    constructor(scene) {
+
+        let x = scene.player.x;
+        let y = scene.player.y;
+
+        // Adds some positioning to the EnergyBall
+        // If player flipped: move a bit to the left, etc.  
+        // scene.player.flipX ? x -= 20 : x += 20;
+        // y += 3;
+        super(scene, x, y, 'tornado');
+
+        scene.add.existing(this);
+        scene.physics.world.enableBody(this);
+        this.body.setSize(64, 64);
+        this.play('magic_barrier_anim');
+        this.body.allowGravity = false;
+
+        // Flips the image if player is flipped
+        // if (scene.player.flipX == false) {
+        //     this.body.velocity.x += 100;
+        //     this.flipX = false;
+
+        // } else if (scene.player.flipX == true) {
+        //     this.body.velocity.x -= 100;
+        //     this.flipX = true;
+
+        // }
+        scene.energyBalls.add(this);
+        scene.time.delayedCall(1500, () => { this.destroy(); }, this, this.scene);
+    }
+}
+
+/**
  * @class EnergyBall
  * 
  * For Player.state: hero_magic_attack

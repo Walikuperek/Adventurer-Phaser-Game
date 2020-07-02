@@ -1,14 +1,22 @@
+/**
+ * @class playGame
+ * 
+ * First map for tutorial purposes:
+ * Learning how to jump
+ * First skill reward placed at the end
+ * First teleport -> second tut map, appears at the end 
+ */
 class playGame extends Phaser.Scene {
   constructor() {
     super('PlayGame');
   }
 
   create() {
-    this.scene.start('bossScene');
-    // Creating backgroundLayers
+    // this.scene.start('bossScene');
+  /* ---------------------- Creating backgroundLayers ---------------------- */
     this.backgroundCreate();
 
-    // Crating map from JSON Tiled
+  /* ---------------------- Creating map from JSON Tiled ---------------------- */
     const map = this.make.tilemap({ key: 'scene1' });
 
     const tilesetDecrationStoneTile = map.addTilesetImage('stoneTile', 'decorationStone', 16, 16, 1, 2);
@@ -24,6 +32,7 @@ class playGame extends Phaser.Scene {
     jungleLayer.setCollisionByProperty({ collides: true });
     stoneLayer.setCollisionByProperty({ collides: true });
 
+  /* ---------------------- DEBUG GRAPHICS COLLIDERS ---------------------- */
     // const debugGraphics = this.add.graphics().setAlpha(0.75);
     // jungleLayer.renderDebug(debugGraphics, {
     //   tileColor: null, // Color of non-colliding tiles
@@ -35,29 +44,28 @@ class playGame extends Phaser.Scene {
     //   collidingTileColor: new Phaser.Display.Color(243, 134, 48, 255), // Color of colliding tiles
     //   faceColor: new Phaser.Display.Color(40, 39, 37, 255) // Color of colliding face edges
     // });
+  /* ---------------------- / DEBUG GRAPHICS COLLIDERS ---------------------- */
 
-    /////////////////////////////////////
-    /////////////   coins   /////////////
-    /////////////////////////////////////
+  /* ---------------------- COINS ---------------------- */
 
-    this.coins = this.physics.add.group({
-      key: 'coins',
-      repeat: 2,
-      setXY: { x: 150, y: 0, stepX: 250 }
-    });
+    // this.coins = this.physics.add.group({
+    //   key: 'coins',
+    //   repeat: 2,
+    //   setXY: { x: 150, y: 0, stepX: 250 }
+    // });
 
-    this.coins.children.iterate(function(child) {
-      child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
-      child.body.offset.y = - 10;
-      child.body.offset.x = 0;
-    });
+    // this.coins.children.iterate(function(child) {
+    //   child.setBounceY(Phaser.Math.FloatBetween(0.4, 0.8));
+    //   child.body.offset.y = - 10;
+    //   child.body.offset.x = 0;
+    // });
 
-    ////////////////////////////////////
-    /////////////   gold   /////////////
-    ////////////////////////////////////
+  /* ---------------------- GOLD ---------------------- */
 
-    this.goldText = this.add.text(5, 15, 'Gold: 0', { fontSize: '12px', fill: 'gold' });
-    this.goldText.setScrollFactor(0);
+    // this.goldText = this.add.text(5, 15, 'Gold: 0', { fontSize: '12px', fill: 'gold' });
+    // this.goldText.setScrollFactor(0);
+
+  /* ---------------------- / COINS ---------------------- */
 
     // TIP 1
     this.tipSpaceText = this.add.text(105, 20, 'Press [SPACE] to jump', { fontSize: '20px', fill: 'gold' });
@@ -70,36 +78,38 @@ class playGame extends Phaser.Scene {
     this.physics.add.collider(this.skillReward, stoneLayer);
 
 
-    // Add player
-    // this.player = new Player(this, 1436, 20);
-    this.player = new Player(this, 16, 100);
+  /* ---------------------- ADD PLAYER ---------------------- */
+    this.player = new Player(this, 1436, 20);
+    // this.player = new Player(this, 16, 100);
     this.healthText = this.add.text(5, 2, 'Health: 100', { fontSize: '12px', fill: 'gold' });
     this.healthText.setScrollFactor(0);
 
-
+  /* ---------------------- NEXTLEVEL & TELEPORT ---------------------- */
     this.nextLevel = this.physics.add.sprite(1313, 170, 'nextLevel').setAlpha(0);
     this.nextLevel.body.allowGravity = false;
     this.physics.add.collider(this.nextLevel, stoneLayer);
     this.nextLevel.setSize(30, 50);
 
-
-    // Add Bees
+  /* ---------------------- BEES ---------------------- */
     this.bee = new Bee(this, 400, 100, 261, 554);
     this.bee2 = new Bee(this, 770, 100, 631, 924);
     this.bee3 = new Bee(this, 1140, 100, 1101, 1294);
     
 
-    // Collisions
+  /* ---------------------- COLLISIONS ---------------------- */
     this.physics.add.collider(this.player, jungleLayer);
     this.physics.add.collider(this.player, stoneLayer);
-    this.physics.add.collider(this.coins, jungleLayer);
-    this.physics.add.collider(this.coins, stoneLayer);
 
-    this.physics.add.overlap(this.player, this.coins, this.player.collectCoin, null, this);
+    // this.physics.add.collider(this.coins, jungleLayer);
+    // this.physics.add.collider(this.coins, stoneLayer);
+    // this.physics.add.overlap(this.player, this.coins, this.player.collectCoin, null, this);
+
     this.physics.add.overlap(this.player, this.bee, beeOverlap, null, this);
     this.physics.add.overlap(this.player, this.bee2, beeOverlap, null, this);
     this.physics.add.overlap(this.player, this.bee3, beeOverlap, null, this);
+
     this.physics.add.overlap(this.player, this.skillReward, skillReward, null, this);
+    this.physics.add.overlap(this.player, this.nextLevel, teleportNextLevel, null, this);
 
     this.physics.add.collider(this.bee, this.platforms);
     this.physics.add.collider(this.bee2, this.platforms);
@@ -109,50 +119,51 @@ class playGame extends Phaser.Scene {
     // arrows
     this.arrows = this.add.group();
 
-    
+  /* ---------------------- CAMERA ---------------------- */
     /**
      * @description CAMERA
+     * 
+     * Set world bounds to allow camera to follow the player
+     * RoundPixels for fixing sprites to display as pixel art
+     * Making the camera follow the player
      */
-    // Set world bounds to allow camera to follow the player
     this.myCam = this.cameras.main;
-    // game.config.width * gameSettings.sceneWidth
     this.myCam.setBounds(0, 0, 1600, game.config.height);
     this.physics.world.setBounds(0, 0, 1600, game.config.height, true, true, true, false);
     this.cameras.main.roundPixels = true;
-
-    // Making the camera follow the player
     this.myCam.startFollow(this.player);
-    /** /camera **/
-
+  /* ---------------------- / CAMERA ---------------------- */
   }
 
+  /* Updates once per frame */
   update() {
-    console.log(this.player.x, this.player.y);
+  /* ---------------------- RESET TIP ---------------------- */
     if (this.player.keySpace.isPressed) { this.tipSpaceText.setText('') };
+
+  /* ---------------------- PLAYER UPDATE ---------------------- */
     this.player.movePlayer();
 
     this.bee.update();
     this.bee2.update();
     this.bee3.update();
 
-    // If player fall off
+  /* ---------------------- IF PLAYER FALLS ---------------------- */
     if (this.player.y > 316) { this.scene.restart(); };
     if (this.player.x >= 1495 && this.player.x <= 1513 && this.player.y > 170) {
       this.myCam.fade(500);
       this.player.setTint(0x00ffff);
       this.scene.restart();
-      // this.time.delayedCall(2000, () => { this.myCam.resetFX() }, this, this);
-      // this.myCam.flash(2);
     }
 
     this.healthText.setText('Health: ' + this.player.stats.hitPoints);
 
+    /* ---------------------- PARALLAX BACKGROUND ---------------------- */
     // Scroll the texture of the tilesprites proportionally to the camera scroll
-    this.parallaxBackground(this.plx_1, .03);
-    this.parallaxBackground(this.plx_2, .1);
-    this.parallaxBackground(this.plx_3, .2);
-    this.parallaxBackground(this.plx_4, .3);
-    this.parallaxBackground(this.plx_5, .6);
+    parallaxBackground(this, this.plx_1, .03);
+    parallaxBackground(this, this.plx_2, .1);
+    parallaxBackground(this, this.plx_3, .2);
+    parallaxBackground(this, this.plx_4, .3);
+    parallaxBackground(this, this.plx_5, .6);
   }
 
   /**
@@ -179,26 +190,23 @@ class playGame extends Phaser.Scene {
     this.plx_4.setOrigin(0, 0).setScrollFactor(0);
     this.plx_5.setOrigin(0, 0).setScrollFactor(0);
   }
-
-  /**
-   * @function parallaxBackground
-   * @param { background Tile Sprite } background 
-   * @param { move Speed Rate } tilePositionXChange
-   * 
-   * Update background move when camera moves
-   */
-  parallaxBackground(background, tilePositionXChange = 1) {
-    background.tilePositionX = this.myCam.scrollX * tilePositionXChange;
-  }
 }
 
+/**
+ * @function beeOverlap
+ * 
+ * When touch the Bee:
+ *  Shake the camera
+ *  Deal dmg to player
+ *  Set tint of player
+ * e.g. of usage:
+ *  this.physics.add.overlap(this.player, this.bee, beeOverlap, null, this);
+ */
 function beeOverlap(player, bee) {
-  // Shake the camera when touch the Bee
   this.myCam.shake(50, 0.02);
   player.playerHurt();
   // Not working uless WEBGL
   player.setTint(0x00ff00);
-  // /.setTint
 
   this.tweens.add({
     targets: this.player,
@@ -210,26 +218,20 @@ function beeOverlap(player, bee) {
   });
 }
 
-function spiderKingCollide(player, spiderKing) {
-
-  // this.myCam.shake(50, 0.02);
-  this.player.setTint(0xff0000);
-  spiderKing.play('spiderKingDeath');
-  
-  this.tweens.add({
-    targets: this.player,
-    duration: 1000,
-    repeat: 0,
-    onComplete: () => {
-      this.player.clearTint();
-      spiderKing.play('spiderKingWalk');
-    }});
-}
-
+/**
+ * @function skillReward
+ * @param {levitating sword} skillReward
+ * 
+ * When touch:
+ *  Flash the camera
+ *  Disappear the skillReward
+ *  Show tooltip
+ *  Show teleport to the next lvl
+ */
 function skillReward(player, skillReward) {
   this.myCam.flash(666);
   skillReward.disableBody(true, true);
-
+  this.tipTeleport = this.add.text(1390, 10, 'Go to the teleport', { fontSize: '14px', fill: 'gold' });
   this.nextLevel.play('nextlevel', true);
   this.tweens.add({
     targets: this.nextLevel,
@@ -237,7 +239,10 @@ function skillReward(player, skillReward) {
     duration: 2000,
     repeat: 0
   });
-  // this.scene.start('bossScene');
 }
 
-
+function teleportNextLevel() {
+  if (teleportActive === true) {
+    this.scene.start('bossScene');
+  }
+}

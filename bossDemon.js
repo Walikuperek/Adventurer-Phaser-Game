@@ -6,7 +6,7 @@ class DemonBoss extends Phaser.Physics.Arcade.Sprite {
         this.SCENE = scene;
         this.player = player;
 
-        this.HP = 20;
+        this.HP = 200;
         this.hurt = 0;
         this.flag = 0;
         this.state = '';
@@ -31,17 +31,17 @@ class DemonBoss extends Phaser.Physics.Arcade.Sprite {
     }
 
     update() {
-        switch(this.state) {
-            case 'hurt':
-                this.scene.tweens.add({
-                    targets: this,
-                    scaleY: { value: 0.9, ease: 'Sine.easeOut', duration: 250 },
-                    scaleX: { value: 0.9, ease: 'Linear', duration: 250 },
-                    onComplete: () => { slash.destroy() }
-                });
-                break;
-        }
-        if (this.x < this.player.x) {
+        // switch(this.state) {
+        //     case 'hurt':
+        //         this.scene.tweens.add({
+        //             targets: this,
+        //             scaleY: { value: 0.9, ease: 'Sine.easeOut', duration: 250 },
+        //             scaleX: { value: 0.9, ease: 'Linear', duration: 250 },
+        //             // onComplete: () => { slash.destroy() }
+        //         });
+        //         break;
+        // }
+        if (this.x < this.player.x - 50) {
             this.flipX = true;
         } else this.flipX = false;
     }

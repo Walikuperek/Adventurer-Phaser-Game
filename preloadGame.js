@@ -13,6 +13,7 @@ class preloadGame extends Phaser.Scene {
       this.load.tilemapTiledJSON('scene1', 'assets/tiles/tiledMapScene1..json');
 
       // Load all assets tile sprites
+      /* First Scene */
       this.load.image('plx1', 'assets/background/plx-1.png');
       this.load.image('plx2', 'assets/background/plx-2.png');
       this.load.image('plx3', 'assets/background/plx-3.png');
@@ -41,6 +42,7 @@ class preloadGame extends Phaser.Scene {
       this.load.image('blood_slash_9', 'assets/hero/blood_slash/B009.png');
       this.load.image('blood_slash_10', 'assets/hero/blood_slash/B010.png');
 
+      this.load.spritesheet('magic_barrier', 'assets/hero/MagicBarrier_64x64.png', { frameWidth: 64, frameWidth: 64 });
       this.load.spritesheet('energy_ball', 'assets/hero/Energy_ball/EnergyBall.png', { frameWidth:  128, frameWidth: 128 });
       this.load.spritesheet('tornado', 'assets/hero/TornadoLoop_96x96.png', { frameWidth: 96, frameWidth: 96 });
       this.load.atlas('meteor', 'assets/maps/meteor.png', 'assets/maps/meteor.json');
@@ -56,7 +58,7 @@ class preloadGame extends Phaser.Scene {
       this.load.spritesheet('nextLevel', 'assets/Special/pipo-mapeffect013a-front.png', { frameWidth: 192, frameHeight: 192 });
       this.load.spritesheet('darkMatter', 'assets/Special/pipo-mapeffect023_192.png', { frameWidth: 192, frameHeight: 192 });
 
-      // # # BOSS LEVEL # # //
+    /* ---------------------- BOSS LEVEL ---------------------- */
       // Load all tiles & JSON for introduction
       this.load.image('moon', 'assets/maps/background.png');
       this.load.image('cemetery', 'assets/maps/graveyard.png');
@@ -71,7 +73,7 @@ class preloadGame extends Phaser.Scene {
       this.load.spritesheet('BOSS-no-breath', 'assets/enemy/DemonBoss/demon-attack-no-breath.png', { frameWidth: 192, frameHeight: 176 });
       this.load.spritesheet('BOSS-fire-breath', 'assets/enemy/DemonBoss/breath-fire.png', { frameWidth: 160, frameHeight: 96 });
       this.load.spritesheet('BOSS-blue-fire-breath', 'assets/enemy/DemonBoss/breath.png', { frameWidth: 160, frameHeight: 96 });
-      //    /BOSS LEVEL     //
+    /* ---------------------- / BOSS LEVEL ---------------------- */
     }
     /**
      * @file player
@@ -202,6 +204,8 @@ class preloadGame extends Phaser.Scene {
         frameRate: 7,
         repeat: 0
       });
+
+      this.anims.create({ key: 'magic_barrier_anim', frames: this.anims.generateFrameNumbers('magic_barrier', { start: 0, end: 32 }), frameRate: 33, repeat: 0 });
 
       this.anims.create({
         key: 'hero_attack1',
@@ -449,3 +453,13 @@ class preloadGame extends Phaser.Scene {
     }
 }
 
+/**
+ * @function parallaxBackground
+ * @param { background Tile Sprite } background 
+ * @param { move Speed Rate } tilePositionXChange
+ * 
+ * Update background move when camera moves
+ */
+function parallaxBackground(scene, background, tilePositionXChange = 1) {
+  background.tilePositionX = scene.myCam.scrollX * tilePositionXChange;
+}

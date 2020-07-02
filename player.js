@@ -134,7 +134,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                             else {
                                 this.changeState('');
                                 this.attackCooldown = 1;
-                                this.scene.time.addEvent({ delay: 500, callback: () => { this.attackCooldown = 0; } });
+                                this.scene.time.addEvent({ delay: 200, callback: () => { this.attackCooldown = 0; } });
                                 this.anims.play('hero_idle', true);
                             }
                         }
@@ -169,7 +169,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                             else {
                                 this.changeState('');
                                 this.attackCooldown = 1;
-                                this.scene.time.addEvent({ delay: 500, callback: () => { this.attackCooldown = 0; } });
+                                this.scene.time.addEvent({ delay: 200, callback: () => { this.attackCooldown = 0; } });
                                 this.anims.play('hero_idle', true);
                             }
                         }
@@ -199,7 +199,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                         if (!this.anims.isPlaying) {
                             this.changeState('');
                             this.attackCooldown = 1;
-                            this.scene.time.addEvent({ delay: 500, callback: () => { this.attackCooldown = 0; } });
+                            this.scene.time.addEvent({ delay: 200, callback: () => { this.attackCooldown = 0; } });
                             this.anims.play('hero_idle', true);
                         }
                         break;
@@ -211,11 +211,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
 
                     case 0:
                         this.anims.play('hero_cast', true);
-                        this.scene.time.addEvent({ delay: 700, callback: () => { new Tornado(this.scene).setScale(0.4); } });
+                        /* Create MagicBarrier and turn player to purple tint */
+                        this.scene.time.addEvent({ delay: 700, callback: () => { new MagicBarrier(this.scene); this.setTint(0x795290) } });
                         this.setVelocityX(0);
                         this.animFlag = 1;
-                        this.bowAttackCooldown = 1;
-                        this.scene.time.addEvent({ delay: 1500, callback: () => { this.bowAttackCooldown = 0; } });
+                        this.magicAttackCooldown = 1;
+                        /* Reset cooldown and reset players tint */
+                        this.scene.time.addEvent({ delay: 3500, callback: () => { this.magicAttackCooldown = 0; this.clearTint(); } });
                         break;
 
                     case 1:
