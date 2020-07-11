@@ -12,8 +12,9 @@ class playGame extends Phaser.Scene {
   }
 
   create() {
+    this.scene.start('RockGame');
     // this.scene.start('bossScene');
-  /* ---------------------- Creating backgroundLayers ---------------------- */
+  /* ---------------------- Creating parallax backgroundLayers ---------------------- */
     this.backgroundCreate();
 
   /* ---------------------- Creating map from JSON Tiled ---------------------- */

@@ -11,6 +11,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
             hitPoints: 100,
             gold: 0,
         };
+
         this.scene = scene;
         this.state = '';
         this.animFlag = 0;
@@ -41,7 +42,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
         this.scene.cameras.main.shake(50, 0.02);
         // this.scene.sound.play('snd_sword_hit', { rate: Phaser.Math.FloatBetween(1, 1.25) });
 
-        var effect = this.scene.add.sprite(attack.x, attack.y, 'blood_slash').setAngle(Math.random() * 90).setScale(0.5);
+        let effect = this.scene.add.sprite(attack.x, attack.y, 'blood_slash').setAngle(Math.random() * 90).setScale(0.5);
         if (this.flipX === true) {
             effect.flipX = true;
         } else effect.flipX = false;
@@ -366,9 +367,10 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                 
                 // JUMP
                 } else {
+                    this.body.velocity.x = 0;
                     // Move left while jump
                     if (this.cursors.left.isDown && this.x > 0) {
-
+                        console.log(this.body.velocity.x);
                         this.flipX = true;
                         this.setVelocityX(-this.stats.walkSpeed);
 
@@ -377,8 +379,13 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                             this.changeState('hero_bow_jump_attack');
 
                         // Roll while jump & move left
-                        else if (this.D.isPressed && !this.rollCooldown)
+                        else if (this.keySpace.isPressed && !this.rollCooldown)
                             this.changeState('hero_roll');
+
+                    } else if (this.cursors.left.isReleased || this.cursors.right.isReleased) {
+
+                        this.setVelocityX(0);
+                        console.log(this.body.velocity.x);
 
                     // Move right while jump
                     } else if (this.cursors.right.isDown && this.x < game.config.width * gameSettings.sceneWidth) {
@@ -391,7 +398,7 @@ class Player extends Phaser.Physics.Arcade.Sprite {
                             this.changeState('hero_bow_jump_attack');
 
                         // Roll while jump & move right
-                        else if (this.D.isPressed && !this.rollCooldown)
+                        else if (this.keySpace.isPressed && !this.rollCooldown)
                             this.changeState('hero_roll');
                     
                     // Shoot while jump

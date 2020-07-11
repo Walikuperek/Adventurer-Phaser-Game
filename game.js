@@ -6,8 +6,10 @@ const gameSettings = {
 const config = {
   type: Phaser.AUTO,
   parent: 'phaser-app',
-  width: 384, // total 384 = 24 * 16
-  height: 208, // total 208 = 13 * 16
+  width: 454, // total 384 = 24 * 16
+  height: 256, // total 208 = 13 * 16
+  //width: 384, // total 384 = 24 * 16
+  //height: 208, // total 208 = 13 * 16
   scale: {
     mode: Phaser.Scale.FIT,
     autoCenter: Phaser.Scale.CENTER_BOTH,
@@ -30,6 +32,7 @@ const config = {
   scene: [ 
     preloadGame,
     playGame,
+    rockGame,
     bossScene
   ],
 }
