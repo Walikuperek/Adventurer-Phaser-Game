@@ -1,20 +1,23 @@
 # Adventurer-Phaser-Game
-JavaScript with Phaser framework RPG game
+JavaScript with Phaser 3 framework RPG game
 
 ![Adventurer Logo](/assets/bow.png)
 
-# DONE:
+Visit my website to play the game - Adventurer
+> [QUAK BLOG](http://quak.com.pl)
+
+####### DONE:
  * map - tutorial
  * map - boss
+ * map - Stone Land, Chapter I
  * boss implemented
-    * animations,
-    * prepared functions/classes for phases e.g. class Meteor(phase 4), class DarkMatter(phase 1)
+    * animations
+    * classes for skills e.g. Meteor, DarkMatter
  * hero implemented
-    * animations,
-    * attacks:
-     * range(+ dmg + slash when dmg dealt)
-     * melee(+ dmg + slash when dmg dealt)
-     * magic
+    * animations
+    * range(+ dmg + slash when dmg dealt)
+    * melee(+ dmg + slash when dmg dealt)
+    * magic
     * slide 
     * jump
     * double jump
@@ -35,6 +38,8 @@ JavaScript with Phaser framework RPG game
 * Town scene
 * Catedra scene
 * Dungeon scene
+* Nether scene
+* Swamp scene
 * Old Man && Angel to lead history
 * BOSS to complete
 * WIN/LOST scene
