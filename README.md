@@ -18,6 +18,7 @@ Visit my website to play the game - Adventurer
     * range(+ dmg + slash when dmg dealt)
     * melee(+ dmg + slash when dmg dealt)
     * magic
+    * stealth
     * slide 
     * jump
     * double jump
