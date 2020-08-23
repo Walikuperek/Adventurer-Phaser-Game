@@ -6,7 +6,7 @@ JavaScript with Phaser 3 framework RPG game
 Visit my website to play the game - Adventurer
 > [QUAK BLOG](http://quak.com.pl)
 
-####### DONE:
+###### DONE:
  * map - tutorial
  * map - boss
  * map - Stone Land, Chapter I
