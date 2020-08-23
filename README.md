@@ -42,13 +42,13 @@ Visit my website to play the game - Adventurer
 * Nether scene
 * Swamp scene
 * Old Man && Angel to lead history
+* 2 MINI BOSSES
 * BOSS to complete
 * WIN/LOST scene
 
 ## Todo for: SMARTPHONE
 * controller
 * UI
-  * Mana
   * Skills with cooldowns (to tap/activate on smartphone)
 * Auto resize 
 
