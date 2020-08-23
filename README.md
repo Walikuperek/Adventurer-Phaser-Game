@@ -1,6 +1,9 @@
 # Adventurer-Phaser-Game
 JavaScript with Phaser framework RPG game
 
+![Adventurer Logo](/assets/bow.png)
+Format: ![Alt Text](url)
+
 # DONE:
  1. map - tutorial
  2. map - boss
