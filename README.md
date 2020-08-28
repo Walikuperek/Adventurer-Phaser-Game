@@ -1,7 +1,7 @@
 # Adventurer-Phaser-Game
 JavaScript with Phaser 3 framework RPG game
 
-![Adventurer Logo](/assets/bow.png)
+![Adventurer Logo](/assets/title-img.png)
 
 Visit my website to play the game - Adventurer
 > [QUAK BLOG](http://quak.com.pl)
