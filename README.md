@@ -34,7 +34,7 @@ Visit my website to play the game - Adventurer
     * skill_reward - animated item
     * coins - animated item
     
-## TODO:
+###### TODO:
 * Menu scene
 * Town scene
 * Catedra scene
@@ -46,7 +46,7 @@ Visit my website to play the game - Adventurer
 * BOSS to complete
 * WIN/LOST scene
 
-## Todo for: SMARTPHONE
+###### Todo for: SMARTPHONE
 * controller
 * UI
   * Skills with cooldowns (to tap/activate on smartphone)
